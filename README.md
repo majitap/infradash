@@ -1,42 +1,68 @@
 # InfraDash
 
-Infrastructure dashboard demo built with Next.js (App Router), Tailwind CSS and the
-shadcn/ui `dashboard-01` block.
+GitLab 운영 콘솔 데모. Next.js(App Router), Tailwind CSS v4, shadcn/ui(`dashboard-01` 블록 기반), Recharts로 만들었습니다.
 
 Live: https://majitap.github.io/infradash/
 
-> **All data is fake.** Every page reads from `lib/mock-data.ts` only.
-> There are no API calls and no tokens anywhere in this project.
+> **모든 데이터는 모의 데이터입니다.** 모든 페이지는 `lib/mock-data.ts`(와 `lib/mock/*`)만 읽습니다.
+> 실제 API 호출과 토큰은 어디에도 없습니다. 재시작·정리 같은 버튼은 확인 다이얼로그와 토스트만 띄웁니다.
 
-## Pages
+## 페이지
 
-| Route       | Content                                                              |
-| ----------- | -------------------------------------------------------------------- |
-| `/`         | Overview: KPI cards, pipeline area chart, joiners/leavers bar chart  |
-| `/users`    | User table with All / Joiners / Leavers tabs and search              |
-| `/runners`  | Runner list (online / offline / paused); restart = confirm + toast   |
-| `/upgrade`  | Current → target version upgrade path with per-step checklists       |
+| 메뉴 | 경로 | 내용 |
+| --- | --- | --- |
+| 개요 | `/` | S1 인시던트 배너, KPI 타일, 파이프라인 추이, 이번 주 커밋 TOP 5, 1년 커밋 히트맵, 러너 현황, 최근 활동, 주의 항목 |
+| 파이프라인 | `/pipelines` | 성공률·소요 시간 KPI, 일별 성공/실패, 실패 스테이지, 프로젝트별 성공률, 최근 파이프라인, 느린 잡 |
+| 러너 | `/runners` | 러너 상태 도넛, 실행기별 잡, 러너 테이블(부하·버전·7일 추이), 재시작/일시중지(데모) |
+| 인시던트 | `/incidents` | 온콜, 월별 MTTR, 심각도 분포, 서비스 가용성, 인시던트 타임라인 |
+| 커밋 | `/commits` | 주간/4주/12주 커밋 순위(포디움 + 4~10위), 연속 커밋 스트릭, 시간대 히트맵, 프로젝트/부서별 커밋, 최근 커밋 |
+| 머지 리퀘스트 | `/merge-requests` | 처리량, 머지 소요 시간, 상태별 MR 테이블, 리뷰어 부하, 오래된 MR, 라벨 분포 |
+| 프로젝트 | `/projects` | 언어 분포, 그룹별 수, 활발한 프로젝트, 검색/가시성 필터가 있는 프로젝트 테이블 |
+| 사용자 | `/users` | 역할 분포, 부서별 인원, 입사/퇴사 추이, 입사자·퇴사자·차단·초대 대기 탭, 2FA |
+| 스토리지 | `/storage` | 유형별 사용량, 월별 추이, 프로젝트별 누적 막대, 정리 후보 |
+| 보안 | `/security` | 심각도 추이, 스캐너별 탐지, 취약점 테이블, 컴플라이언스 점검, 프로젝트 위험도 |
+| 감사 로그 | `/audit` | 유형별 이벤트, 활동이 많은 사용자, 실패 이벤트, 검색/필터 가능한 로그 테이블 |
+| 업그레이드 | `/upgrade` | 현재 → 목표 버전 경로, 사전 점검, 주요 변경 사항, 단계별 체크리스트 |
 
-All pages share one layout (`SidebarProvider` + `AppSidebar` + `SiteHeader`) in
-`app/layout.tsx`. Sidebar items are defined in `lib/nav.ts`.
+공통 셸: 그룹화된 사이드바, 페이지 제목/설명이 있는 헤더, `⌘K` 빠른 이동, 알림, 라이트/다크 테마.
 
-## Development
+## 구조
+
+```
+app/                  라우트 (페이지는 views를 렌더링만 함)
+components/layout/    사이드바, 헤더, 테마, 커맨드 팔레트
+components/dashboard/ KPI 타일, 히트맵, 리더보드, 포디움, 도넛, 바 리스트 등 공용 위젯
+components/charts/    Recharts 래퍼 (막대, 선, 영역)
+components/views/     페이지별 화면
+components/ui/        shadcn/ui 컴포넌트
+lib/mock/             주제별 모의 데이터 (시드 기반 결정적 생성)
+lib/mock-data.ts      모의 데이터 단일 진입점
+lib/nav.ts            메뉴 정의
+lib/format.ts         숫자/날짜 포맷 (로케일 의존 없음)
+```
+
+## 개발
 
 ```bash
 npm install
 npm run dev
 ```
 
-Because of `basePath`, the dev server serves the app at http://localhost:3000/infradash/.
+`basePath` 때문에 개발 서버는 http://localhost:3000/infradash/ 에서 열립니다.
 
-## Build and deploy
+## 빌드와 배포
 
-`next.config.ts` uses `output: "export"`, `basePath: "/infradash"`,
-`trailingSlash: true` and `images.unoptimized: true`.
+`next.config.ts`는 `output: "export"`, `basePath: "/infradash"`, `trailingSlash: true`, `images.unoptimized: true`를 사용합니다.
 
 ```bash
-npm run build   # static site in ./out
+npm run build   # ./out 에 정적 사이트 생성
 ```
 
-Pushing to `main` runs `.github/workflows/deploy.yml`, which builds the site and
-deploys `./out` to GitHub Pages (Settings > Pages > Source: GitHub Actions).
+`main`에 푸시하면 `.github/workflows/deploy.yml`이 빌드 후 `./out`을 GitHub Pages에 배포합니다
+(Settings > Pages > Source: GitHub Actions).
+
+## 디자인 메모
+
+- 글꼴: 네이버 나눔스퀘어 네오(공식 웹폰트 CDN), 기본 17px
+- 차트 색상: 범주형 8색 팔레트는 색각 이상과 대비 검사를 통과한 순서로 고정, 상태 색(성공/경고/심각/치명)은 항상 아이콘·라벨과 함께 사용
+- 히트맵: 단일 색상(파랑) 순차 램프, 다크 모드는 별도 단계 사용
