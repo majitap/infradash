@@ -118,7 +118,7 @@ function buildUsers(): MockUser[] {
         ? leftAt
         : status === "pending"
           ? null
-          : addDays(MOCK_TODAY, velocity > 0 ? intBetween(rand, 0, 3) : intBetween(rand, 2, 30))
+          : addDays(MOCK_TODAY, -(velocity > 0 ? intBetween(rand, 0, 3) : intBetween(rand, 2, 30)))
 
     users.push({
       id: 1000 + i,

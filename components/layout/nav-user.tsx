@@ -27,7 +27,7 @@ export function NavUser() {
         <DropdownMenu>
           <DropdownMenuTrigger render={<SidebarMenuButton size="lg" className="aria-expanded:bg-sidebar-accent" />}>
             <Avatar className="size-8 rounded-lg">
-              <AvatarFallback className="brand-gradient rounded-lg text-sm font-bold text-white">
+              <AvatarFallback className="rounded-lg bg-primary text-sm font-bold text-primary-foreground">
                 {initials(user.name)}
               </AvatarFallback>
             </Avatar>
@@ -42,7 +42,7 @@ export function NavUser() {
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar className="size-8 rounded-lg">
-                    <AvatarFallback className="brand-gradient rounded-lg text-sm font-bold text-white">
+                    <AvatarFallback className="rounded-lg bg-primary text-sm font-bold text-primary-foreground">
                       {initials(user.name)}
                     </AvatarFallback>
                   </Avatar>

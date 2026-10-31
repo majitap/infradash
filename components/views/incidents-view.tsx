@@ -96,7 +96,7 @@ export function IncidentsView() {
       </KpiGrid>
 
       <div className="grid grid-cols-1 gap-4 px-4 lg:px-6 @3xl/main:grid-cols-2 @6xl/main:grid-cols-3">
-        <Card className="tone-glow" style={{ "--tone": "var(--tone-rose)" } as React.CSSProperties}>
+        <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <PhoneCallIcon className="size-4 text-tone-rose" />

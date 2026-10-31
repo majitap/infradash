@@ -44,21 +44,10 @@ export function usePipelineRange() {
 export function PipelineAreaChart({ days, className }: { days: PipelineDay[]; className?: string }) {
   const config = seriesConfig(SERIES)
   const row = tooltipRow(config, fmtInt)
-  const id = React.useId().replace(/:/g, "")
 
   return (
     <ChartContainer config={config} className={className ?? "aspect-auto h-64 w-full"}>
       <AreaChart data={days} margin={{ left: 0, right: 8, top: 8 }}>
-        <defs>
-          <linearGradient id={`ok-${id}`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="var(--color-success)" stopOpacity={0.55} />
-            <stop offset="95%" stopColor="var(--color-success)" stopOpacity={0.05} />
-          </linearGradient>
-          <linearGradient id={`fail-${id}`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="var(--color-failed)" stopOpacity={0.7} />
-            <stop offset="95%" stopColor="var(--color-failed)" stopOpacity={0.1} />
-          </linearGradient>
-        </defs>
         <CartesianGrid {...GRID_PROPS} />
         <XAxis dataKey="date" {...AXIS_PROPS} minTickGap={28} tickFormatter={(v) => fmtDate(String(v))} />
         <YAxis {...AXIS_PROPS} width={36} tickFormatter={(v) => fmtInt(Number(v))} />
@@ -66,8 +55,8 @@ export function PipelineAreaChart({ days, className }: { days: PipelineDay[]; cl
           cursor={{ stroke: "var(--border)" }}
           content={<ChartTooltipContent labelFormatter={(l) => fmtDate(String(l))} formatter={row} />}
         />
-        <Area dataKey="success" type="monotone" stackId="a" stroke="var(--color-success)" strokeWidth={2} fill={`url(#ok-${id})`} isAnimationActive={false} />
-        <Area dataKey="failed" type="monotone" stackId="a" stroke="var(--color-failed)" strokeWidth={2} fill={`url(#fail-${id})`} isAnimationActive={false} />
+        <Area dataKey="success" type="monotone" stackId="a" stroke="var(--color-success)" strokeWidth={2} fill="var(--color-success)" fillOpacity={0.14} isAnimationActive={false} />
+        <Area dataKey="failed" type="monotone" stackId="a" stroke="var(--color-failed)" strokeWidth={2} fill="var(--color-failed)" fillOpacity={0.3} isAnimationActive={false} />
         <ChartLegend itemSorter={null} content={<ChartLegendContent />} />
       </AreaChart>
     </ChartContainer>

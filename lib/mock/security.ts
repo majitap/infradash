@@ -1,5 +1,8 @@
 import { WEEK_STARTS, addDays, MOCK_TODAY, intBetween, mulberry32 } from "./core"
 import { projects } from "./projects"
+import { users } from "./users"
+
+const adminCount = users.filter((u) => u.isAdmin && u.status !== "deactivated").length
 
 export type Severity = "critical" | "high" | "medium" | "low"
 export type Scanner = "SAST" | "DAST" | "Dependency" | "Container" | "Secret" | "IaC"
@@ -101,7 +104,7 @@ export const complianceChecks: ComplianceCheck[] = [
   { id: "secret", label: "푸시 시 시크릿 탐지", passed: true, detail: "전체 그룹에서 활성" },
   { id: "tokens", label: "PAT 만료 기한 90일", passed: true, detail: "만료 없는 토큰 0개" },
   { id: "deploy", label: "프로덕션 배포 승인 게이트", passed: true, detail: "보호된 환경 production" },
-  { id: "admin", label: "관리자 계정 5개 이하", passed: false, detail: "현재 관리자 7명" },
+  { id: "admin", label: "관리자 계정 5개 이하", passed: adminCount <= 5, detail: `현재 관리자 ${adminCount}명 · 권한 관리에서 정리` },
 ]
 
 export const projectRisk = [...projects]

@@ -9,6 +9,7 @@ import {
   ServerIcon,
   ShieldCheckIcon,
   SirenIcon,
+  UserCogIcon,
   UsersIcon,
   WorkflowIcon,
   type LucideIcon,
@@ -52,6 +53,7 @@ export const navGroups: NavGroup[] = [
     label: "관리",
     items: [
       { title: "사용자", url: "/users", icon: UsersIcon, description: "계정, 입사자/퇴사자, 2FA", tone: "indigo", keywords: ["users", "members", "멤버", "계정"] },
+      { title: "권한 관리", url: "/access", icon: UserCogIcon, description: "접근 요청 승인, 그룹 역할, 관리자 계정", tone: "orange", keywords: ["access", "permissions", "roles", "admin", "권한", "승인", "인가", "관리자"] },
       { title: "스토리지", url: "/storage", icon: HardDriveIcon, description: "저장소, 아티팩트, 레지스트리 사용량", tone: "amber", keywords: ["storage", "disk", "artifacts", "registry"] },
       { title: "보안", url: "/security", icon: ShieldCheckIcon, description: "취약점, 스캐너, 컴플라이언스", tone: "rose", keywords: ["security", "vulnerabilities", "취약점"] },
       { title: "감사 로그", url: "/audit", icon: ScrollTextIcon, description: "누가 무엇을 언제 변경했는지", tone: "sky", keywords: ["audit", "log", "events"] },

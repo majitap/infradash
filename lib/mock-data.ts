@@ -22,6 +22,7 @@ export * from "./mock/incidents"
 export * from "./mock/audit"
 export * from "./mock/upgrade"
 export * from "./mock/activity"
+export * from "./mock/access"
 
 export const currentUser = {
   name: "김인프라",

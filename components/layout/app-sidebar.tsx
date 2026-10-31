@@ -46,7 +46,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" className="hover:bg-transparent" render={<Link href="/" />}>
-              <span className="brand-gradient flex size-9 shrink-0 items-center justify-center rounded-xl text-white shadow-md shadow-tone-indigo/30">
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                 <ServerCogIcon className="size-5" />
               </span>
               <span className="grid flex-1 text-left leading-tight">

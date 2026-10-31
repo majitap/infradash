@@ -31,11 +31,10 @@ export function KpiTile({ label, value, unit, hint, trend, icon: Icon, tone, spa
     <Card
       size="sm"
       className={cn(
-        "tone-glow relative h-full gap-3 overflow-hidden px-4 py-4 transition-shadow",
-        href && "hover:shadow-md hover:ring-foreground/15",
+        "relative h-full gap-3 px-4 py-4 transition-colors",
+        href && "hover:bg-muted/40 hover:ring-foreground/15",
         className
       )}
-      style={{ "--tone": t.cssVar } as React.CSSProperties}
     >
       <div className="flex items-center gap-2.5">
         <span className={cn("flex size-8 shrink-0 items-center justify-center rounded-lg", t.soft, t.text)}>
@@ -44,18 +43,20 @@ export function KpiTile({ label, value, unit, hint, trend, icon: Icon, tone, spa
         <span className="min-w-0 flex-1 truncate text-sm font-bold text-muted-foreground">{label}</span>
       </div>
       <div className="flex items-end justify-between gap-3">
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
-            <span className="text-3xl font-extrabold tracking-tight whitespace-nowrap">{value}</span>
-            {unit && <span className="text-sm font-bold text-muted-foreground">{unit}</span>}
-            {trend && <TrendBadge trend={trend} className="self-center" />}
-          </div>
-          {hint && <p className="mt-1 truncate text-xs text-muted-foreground">{hint}</p>}
+        <div className="flex min-w-0 items-baseline gap-1">
+          <span className="text-3xl font-extrabold tracking-tight whitespace-nowrap">{value}</span>
+          {unit && <span className="text-sm font-bold text-muted-foreground">{unit}</span>}
         </div>
         {spark && spark.length > 1 && (
-          <Sparkline data={spark} color={t.cssVar} className="h-9 w-24 min-w-14 shrink" />
+          <Sparkline data={spark} color={t.cssVar} fill={false} className="h-8 w-24 min-w-14 shrink" />
         )}
       </div>
+      {(trend || hint) && (
+        <div className="-mt-1 flex min-w-0 items-center gap-2 text-xs text-muted-foreground">
+          {trend && <TrendBadge trend={trend} />}
+          {hint && <span className="truncate">{hint}</span>}
+        </div>
+      )}
     </Card>
   )
 

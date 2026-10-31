@@ -1,12 +1,9 @@
-"use client"
-
-import * as React from "react"
-
 type SparklineProps = {
   data: number[]
   /** any CSS color, usually a tone or chart variable */
   color?: string
   className?: string
+  /** flat translucent area under the line */
   fill?: boolean
   strokeWidth?: number
 }
@@ -15,8 +12,7 @@ type SparklineProps = {
  * Minimal inline sparkline. No axes, no labels: it only shows the shape.
  * The last point is marked so the current value is easy to find.
  */
-export function Sparkline({ data, color = "var(--chart-1)", className, fill = true, strokeWidth = 2 }: SparklineProps) {
-  const id = React.useId().replace(/:/g, "")
+export function Sparkline({ data, color = "var(--chart-1)", className, fill = false, strokeWidth = 2 }: SparklineProps) {
   if (data.length < 2) return null
 
   const w = 100
@@ -33,13 +29,7 @@ export function Sparkline({ data, color = "var(--chart-1)", className, fill = tr
 
   return (
     <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" className={className} aria-hidden="true">
-      <defs>
-        <linearGradient id={`spark-${id}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity={0.35} />
-          <stop offset="100%" stopColor={color} stopOpacity={0} />
-        </linearGradient>
-      </defs>
-      {fill && <path d={area} fill={`url(#spark-${id})`} />}
+      {fill && <path d={area} fill={color} fillOpacity={0.12} />}
       <path d={line} fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
       <circle cx={lx} cy={ly} r={2.6} fill={color} vectorEffect="non-scaling-stroke" />
     </svg>

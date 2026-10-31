@@ -13,7 +13,14 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { openIncidents, openMRs, runnerCounts, openVulnerabilities } from "@/lib/mock-data"
+import {
+  highPrivilegePending,
+  openIncidents,
+  openMRs,
+  openVulnerabilities,
+  pendingRequestCount,
+  runnerCounts,
+} from "@/lib/mock-data"
 import { navGroups, normalizePath } from "@/lib/nav"
 import { TONES } from "@/lib/tones"
 import { cn } from "@/lib/utils"
@@ -23,6 +30,7 @@ const BADGES: Record<string, { value: number; alert?: boolean } | undefined> = {
   "/merge-requests": { value: openMRs.length },
   "/runners": { value: runnerCounts.offline, alert: runnerCounts.offline > 0 },
   "/security": { value: openVulnerabilities },
+  "/access": { value: pendingRequestCount, alert: highPrivilegePending > 0 },
 }
 
 export function NavMain() {

@@ -8,23 +8,16 @@ import { fmtInt, fmtPct } from "@/lib/format"
 import type { LeaderboardRow } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 
-const TONE: Record<number, string> = {
-  1: "oklch(0.8 0.16 85)",
-  2: "oklch(0.75 0.02 260)",
-  3: "oklch(0.72 0.14 50)",
-}
-
 function PodiumCard({ row, rank, periodLabel }: { row: LeaderboardRow; rank: number; periodLabel: string }) {
   const trend = trendOf(row.commits, row.previous)
   const first = rank === 1
   return (
     <Card
       className={cn(
-        "tone-glow relative items-center gap-3 px-4 text-center",
-        first ? "py-6 ring-2 ring-amber-400/60 @3xl/main:order-2" : "py-5 @3xl/main:order-1",
+        "relative items-center gap-3 px-4 text-center",
+        first ? "py-6 ring-2 ring-amber-400/70 @3xl/main:order-2" : "py-5 @3xl/main:order-1",
         rank === 3 && "@3xl/main:order-3"
       )}
-      style={{ "--tone": TONE[rank] } as React.CSSProperties}
     >
       <RankBadge rank={rank} className="absolute top-3 left-3" />
       <div className="relative">
