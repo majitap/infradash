@@ -7,17 +7,17 @@ import type { LeaderboardRow } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 
 const RANK_STYLE: Record<number, string> = {
-  1: "bg-amber-400 text-amber-950 shadow-sm shadow-amber-400/40",
-  2: "bg-slate-300 text-slate-800 dark:bg-slate-400 dark:text-slate-900",
-  3: "bg-orange-300 text-orange-950 dark:bg-orange-400",
+  1: "bg-gradient-to-br from-[#FFD60A] to-[#FF9F0A] text-[#3A2200] shadow-xs",
+  2: "bg-gradient-to-br from-[#E5E5EA] to-[#AEAEB2] text-[#1C1C1E]",
+  3: "bg-gradient-to-br from-[#FDBA74] to-[#EA580C] text-white",
 }
 
 export function RankBadge({ rank, className }: { rank: number; className?: string }) {
   return (
     <span
       className={cn(
-        "inline-flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-extrabold tabular-nums",
-        RANK_STYLE[rank] ?? "bg-muted text-muted-foreground",
+        "inline-flex size-6 shrink-0 items-center justify-center rounded-full text-[11.5px] font-bold tabular-nums",
+        RANK_STYLE[rank] ?? "bg-black/[0.045] text-muted-foreground dark:bg-white/[0.07]",
         className
       )}
     >
@@ -46,29 +46,32 @@ export function Leaderboard({
         return (
           <li
             key={row.user.id}
-            className="grid grid-cols-[auto_auto_minmax(0,1fr)_auto] items-center gap-x-3 border-b py-2.5 last:border-b-0"
+            className="grid grid-cols-[auto_auto_minmax(0,1fr)_auto] items-center gap-x-3 border-b border-black/[0.045] py-2.5 last:border-b-0 dark:border-white/[0.055]"
           >
             <RankBadge rank={rank} />
             <UserAvatar name={row.user.name} hue={row.user.hue} size="sm" />
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <span className="truncate text-sm font-bold">{row.user.name}</span>
+                <span className="truncate text-[13.5px] font-semibold tracking-[-0.01em] text-foreground">{row.user.name}</span>
                 {rank === 1 && <CrownIcon className="size-3.5 text-amber-500" />}
                 {row.user.streakDays >= 14 && (
-                  <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-orange-600 dark:text-orange-300">
-                    <FlameIcon className="size-3" />
+                  <span className="inline-flex items-center gap-0.5 rounded-full bg-tone-orange/10 px-1.5 py-px text-[10.5px] font-semibold text-tone-orange">
+                    <FlameIcon className="size-2.5" />
                     {row.user.streakDays}일
                   </span>
                 )}
                 <span className="truncate text-xs text-muted-foreground">{row.user.department}</span>
               </div>
-              <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-muted">
-                <div className="h-full rounded-full bg-tone-violet" style={{ width: `${(row.commits / max) * 100}%` }} />
+              <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-black/[0.05] dark:bg-white/[0.07]">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-tone-indigo to-tone-violet transition-[width] duration-300"
+                  style={{ width: `${(row.commits / max) * 100}%` }}
+                />
               </div>
             </div>
             <div className="flex flex-col items-end gap-0.5">
-              <span className="text-sm font-extrabold tabular-nums">{fmtInt(row.commits)}</span>
-              {showPrevious && <TrendBadge trend={trend} className="px-1 py-0 text-[11px]" muted={row.previous === 0} />}
+              <span className="text-[14px] font-bold tracking-[-0.02em] text-foreground tabular-nums">{fmtInt(row.commits)}</span>
+              {showPrevious && <TrendBadge trend={trend} className="px-1.5 py-0 text-[10.5px]" muted={row.previous === 0} />}
             </div>
           </li>
         )

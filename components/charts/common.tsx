@@ -17,15 +17,26 @@ export function tooltipRow(config: ChartConfig, format: (v: number) => string) {
     const key = String(name)
     const color = item?.payload?.fill ?? item?.color
     return (
-      <div className="flex w-full items-center gap-2">
-        <span className="size-2.5 shrink-0 rounded-[3px]" style={{ background: color }} />
+      <div className="flex w-full items-center gap-2.5 text-[12.5px]">
+        <span className="size-2.5 shrink-0 rounded-full" style={{ background: color }} />
         <span className="text-muted-foreground">{config[key]?.label ?? key}</span>
-        <span className="ml-auto pl-3 font-bold text-foreground tabular-nums">{format(Number(value))}</span>
+        <span className="ml-auto pl-3 font-semibold text-foreground tabular-nums">{format(Number(value))}</span>
       </div>
     )
   }
   return Row
 }
 
-export const GRID_PROPS = { vertical: false, stroke: "var(--border)", strokeOpacity: 0.7 } as const
-export const AXIS_PROPS = { tickLine: false, axisLine: false, tickMargin: 8, fontSize: 11 } as const
+export const GRID_PROPS = {
+  vertical: false,
+  stroke: "var(--border)",
+  strokeDasharray: "3 3",
+  strokeOpacity: 0.85,
+} as const
+
+export const AXIS_PROPS = {
+  tickLine: false,
+  axisLine: false,
+  tickMargin: 10,
+  fontSize: 11.5,
+} as const

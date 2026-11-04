@@ -27,7 +27,7 @@ export function TimeLineChart({
   labelFormatter,
   className,
   legend = series.length > 1,
-  yWidth = 36,
+  yWidth = 38,
 }: Props) {
   const config = seriesConfig(series)
   const row = tooltipRow(config, valueFormatter)
@@ -39,7 +39,7 @@ export function TimeLineChart({
         <XAxis dataKey={xKey} {...AXIS_PROPS} tickFormatter={xFormatter} minTickGap={16} />
         <YAxis {...AXIS_PROPS} width={yWidth} tickFormatter={(v) => valueFormatter(Number(v))} />
         <ChartTooltip
-          cursor={{ stroke: "var(--border)" }}
+          cursor={{ stroke: "var(--border)", strokeWidth: 1 }}
           content={
             <ChartTooltipContent
               labelFormatter={(label) => (labelFormatter ?? xFormatter)(String(label))}
@@ -53,9 +53,9 @@ export function TimeLineChart({
             type="monotone"
             dataKey={s.key}
             stroke={`var(--color-${s.key})`}
-            strokeWidth={2}
-            dot={{ r: 2.5, strokeWidth: 0, fill: `var(--color-${s.key})` }}
-            activeDot={{ r: 4.5, stroke: "var(--card)", strokeWidth: 2 }}
+            strokeWidth={2.2}
+            dot={{ r: 3, strokeWidth: 1.5, stroke: "var(--card)", fill: `var(--color-${s.key})` }}
+            activeDot={{ r: 5, stroke: "var(--card)", strokeWidth: 2 }}
             isAnimationActive={false}
           />
         ))}

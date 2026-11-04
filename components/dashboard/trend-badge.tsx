@@ -15,13 +15,19 @@ export function TrendBadge({ trend, className, muted }: { trend: Trend; classNam
   const Icon = trend.direction === "up" ? ArrowUpRightIcon : trend.direction === "down" ? ArrowDownRightIcon : MinusIcon
   const color =
     trend.direction === "flat" || muted
-      ? "bg-muted text-muted-foreground"
+      ? "bg-black/[0.045] text-muted-foreground dark:bg-white/[0.07]"
       : positive
-        ? "bg-emerald-500/12 text-emerald-700 dark:text-emerald-300"
-        : "bg-rose-500/12 text-rose-700 dark:text-rose-300"
+        ? "bg-[#28cd41]/12 text-[#15803d] dark:bg-[#30d158]/16 dark:text-[#4ade80]"
+        : "bg-[#ff3b30]/11 text-[#dc2626] dark:bg-[#ff453a]/16 dark:text-[#ff6961]"
   return (
-    <span className={cn("inline-flex shrink-0 items-center gap-0.5 rounded-full px-1.5 py-0.5 text-xs font-bold whitespace-nowrap tabular-nums", color, className)}>
-      <Icon className="size-3.5" />
+    <span
+      className={cn(
+        "inline-flex shrink-0 items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[11.5px] font-semibold whitespace-nowrap tabular-nums",
+        color,
+        className
+      )}
+    >
+      <Icon className="size-3" />
       {trend.label}
     </span>
   )

@@ -16,22 +16,30 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: { default: "InfraDash", template: "%s · InfraDash" },
-  description: "GitLab 운영 콘솔 데모. 모든 데이터는 모의 데이터입니다.",
+  title: { default: "InfraDash · GitLab Control Plane", template: "%s · InfraDash" },
+  description: "Apple HIG 감성으로 설계된 엔터프라이즈 GitLab 운영 콘솔 데모.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ko" suppressHydrationWarning className={`${geistMono.variable} h-full`}>
-      <body className="min-h-full">
+      <head>
+        <link
+          rel="stylesheet"
+          as="style"
+          crossOrigin="anonymous"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+        />
+      </head>
+      <body className="min-h-full selection:bg-primary/18 selection:text-foreground">
         <ThemeProvider>
           <TooltipProvider>
             <CommandMenuProvider>
               <SidebarProvider
                 style={
                   {
-                    "--sidebar-width": "calc(var(--spacing) * 68)",
-                    "--header-height": "calc(var(--spacing) * 14)",
+                    "--sidebar-width": "16.5rem",
+                    "--header-height": "3.5rem",
                   } as React.CSSProperties
                 }
               >
@@ -39,7 +47,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 <SidebarInset className="min-w-0">
                   <SiteHeader />
                   <div className="flex flex-1 flex-col">
-                    <div className="@container/main flex flex-1 flex-col">
+                    <div className="@container/main mx-auto flex w-full max-w-[1600px] flex-1 flex-col">
                       <div className="flex flex-col gap-5 py-5 md:gap-6 md:py-6">{children}</div>
                     </div>
                   </div>

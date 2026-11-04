@@ -34,19 +34,19 @@ export function TimeBarChart({
   highlightLast = false,
   className,
   legend = series.length > 1,
-  yWidth = 36,
+  yWidth = 38,
 }: Props) {
   const config = seriesConfig(series)
   const row = tooltipRow(config, valueFormatter)
 
   return (
     <ChartContainer config={config} className={cn("aspect-auto h-60 w-full", className)}>
-      <BarChart data={data} barCategoryGap={stacked ? "28%" : "22%"} barGap={2} margin={{ left: 0, right: 4, top: 8 }}>
+      <BarChart data={data} barCategoryGap={stacked ? "30%" : "24%"} barGap={3} margin={{ left: 0, right: 4, top: 10 }}>
         <CartesianGrid {...GRID_PROPS} />
         <XAxis dataKey={xKey} {...AXIS_PROPS} tickFormatter={xFormatter} minTickGap={16} />
         <YAxis {...AXIS_PROPS} width={yWidth} tickFormatter={(v) => valueFormatter(Number(v))} />
         <ChartTooltip
-          cursor={{ fill: "var(--muted)", fillOpacity: 0.6 }}
+          cursor={{ fill: "var(--muted)", fillOpacity: 0.45, radius: 6 }}
           content={
             <ChartTooltipContent
               labelFormatter={(label) => (labelFormatter ?? xFormatter)(String(label))}
@@ -60,14 +60,14 @@ export function TimeBarChart({
             dataKey={s.key}
             stackId={stacked ? "stack" : undefined}
             fill={`var(--color-${s.key})`}
-            radius={stacked ? (idx === series.length - 1 ? [4, 4, 0, 0] : 0) : [4, 4, 0, 0]}
+            radius={stacked ? (idx === series.length - 1 ? [6, 6, 0, 0] : [0, 0, 0, 0]) : [6, 6, 2, 2]}
             stroke={stacked ? "var(--card)" : undefined}
             strokeWidth={stacked ? 1.5 : 0}
-            maxBarSize={44}
+            maxBarSize={40}
             isAnimationActive={false}
           >
             {highlightLast && series.length === 1
-              ? data.map((_, i) => <Cell key={i} fillOpacity={i === data.length - 1 ? 1 : 0.45} />)
+              ? data.map((_, i) => <Cell key={i} fillOpacity={i === data.length - 1 ? 1 : 0.38} />)
               : null}
           </Bar>
         ))}

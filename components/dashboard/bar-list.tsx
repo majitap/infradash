@@ -12,8 +12,7 @@ export type BarListItem = {
 }
 
 /**
- * Horizontal bar list for nominal categories. One color for the whole list
- * unless each item carries its own identity color.
+ * Horizontal Apple capsule bar list for nominal categories.
  */
 export function BarList({
   items,
@@ -28,18 +27,20 @@ export function BarList({
 }) {
   const top = max ?? Math.max(...items.map((i) => i.value), 1)
   return (
-    <ul className={cn("flex flex-col gap-2.5", className)}>
+    <ul className={cn("flex flex-col gap-3", className)}>
       {items.map((item) => (
-        <li key={item.key} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1">
-          <div className="flex min-w-0 items-center justify-between gap-2 text-sm">
-            <span className="truncate font-medium">{item.label}</span>
-            {item.secondary && <span className="shrink-0 text-xs text-muted-foreground">{item.secondary}</span>}
+        <li key={item.key} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1.5">
+          <div className="flex min-w-0 items-center justify-between gap-2 text-[13px]">
+            <span className="truncate font-medium text-foreground">{item.label}</span>
+            {item.secondary && <span className="shrink-0 text-[11.5px] text-muted-foreground">{item.secondary}</span>}
           </div>
-          <span className="text-sm font-bold tabular-nums">{item.display ?? item.value.toLocaleString("en-US")}</span>
-          <div className="col-span-2 h-2 overflow-hidden rounded-full bg-muted">
+          <span className="text-[13px] font-semibold text-foreground tabular-nums">
+            {item.display ?? item.value.toLocaleString("en-US")}
+          </span>
+          <div className="col-span-2 h-1.5 overflow-hidden rounded-full bg-black/[0.05] dark:bg-white/[0.07]">
             <div
-              className="h-full rounded-full transition-[width]"
-              style={{ width: `${Math.max(2, (item.value / top) * 100)}%`, background: item.color ?? color }}
+              className="h-full rounded-full transition-[width] duration-300"
+              style={{ width: `${Math.max(3, (item.value / top) * 100)}%`, background: item.color ?? color }}
             />
           </div>
         </li>

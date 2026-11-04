@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils"
 
-/** In-page section heading used between card rows. */
+/** In-page section heading used between bento rows. */
 export function SectionHeader({
   title,
   description,
@@ -15,8 +15,8 @@ export function SectionHeader({
   return (
     <div className={cn("flex flex-wrap items-end justify-between gap-2 px-4 lg:px-6", className)}>
       <div>
-        <h2 className="text-lg font-extrabold tracking-tight">{title}</h2>
-        {description && <p className="text-sm text-muted-foreground">{description}</p>}
+        <h2 className="text-[17px] font-bold tracking-[-0.022em] text-foreground">{title}</h2>
+        {description && <p className="text-[13px] text-muted-foreground">{description}</p>}
       </div>
       {action}
     </div>

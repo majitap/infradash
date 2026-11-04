@@ -22,10 +22,10 @@ export function HourHeatmap({ matrix, className }: { matrix: number[][]; classNa
     { v: 0, d: 0, h: 0 }
   )
   return (
-    <div className={cn("flex flex-col gap-2", className)}>
-      <div className="grid grid-cols-[auto_1fr] gap-x-2">
+    <div className={cn("flex flex-col gap-2.5", className)}>
+      <div className="grid grid-cols-[auto_1fr] gap-x-2.5 gap-y-1">
         <div />
-        <div className="grid grid-cols-24 text-[10px] text-muted-foreground">
+        <div className="grid grid-cols-24 text-[10px] font-medium text-muted-foreground">
           {Array.from({ length: 24 }, (_, h) => (
             <span key={h} className={cn("overflow-visible leading-3 whitespace-nowrap", h % 6 !== 0 && "invisible")}>
               {h}시
@@ -47,9 +47,9 @@ export function HourHeatmap({ matrix, className }: { matrix: number[][]; classNa
                   key={h}
                   title={`${DAYS[d]}요일 ${h}시 · 평균 ${v.toFixed(1)}개`}
                   className={cn(
-                    "h-4 min-w-0 rounded-[3px] ring-1 ring-inset ring-foreground/5",
+                    "h-4.5 min-w-0 rounded-[3.5px] transition-transform duration-150 hover:scale-115",
                     LEVEL_CLASS[levelOf(v, max)],
-                    peak.d === d && peak.h === h && "ring-2 ring-foreground/60"
+                    peak.d === d && peak.h === h && "ring-2 ring-primary/80"
                   )}
                 />
               ))}
@@ -57,14 +57,14 @@ export function HourHeatmap({ matrix, className }: { matrix: number[][]; classNa
           ))}
         </div>
       </div>
-      <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+      <div className="flex items-center justify-between text-[11.5px] text-muted-foreground">
         <span>
-          가장 활발한 시간: <b className="text-foreground">{DAYS[peak.d]}요일 {peak.h}시</b> (평균 {peak.v.toFixed(1)}개)
+          피크 타임: <b className="font-semibold text-foreground">{DAYS[peak.d]}요일 {peak.h}시</b> (평균 {peak.v.toFixed(1)}개)
         </span>
         <span className="flex items-center gap-1.5">
           적음
           {LEVEL_CLASS.map((c) => (
-            <span key={c} className={cn("size-3 rounded-[3px] ring-1 ring-inset ring-foreground/5", c)} />
+            <span key={c} className={cn("size-3 rounded-[3.5px]", c)} />
           ))}
           많음
         </span>

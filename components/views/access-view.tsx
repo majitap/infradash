@@ -109,12 +109,12 @@ const PAGE_SIZE = 12
 function RoleChip({ role }: { role: UserRole | "Admin" | null }) {
   if (!role) return <span className="text-xs text-muted-foreground">없음</span>
   if (role === "Admin")
-    return <span className="rounded bg-amber-500/14 px-1.5 py-px text-[11px] font-bold text-amber-800 dark:text-amber-300">관리자</span>
-  return <span className={cn("rounded px-1.5 py-px text-[11px] font-bold", ROLE_CHIP[role])}>{role}</span>
+    return <span className="rounded-full bg-tone-amber/14 px-2 py-0.5 text-[11px] font-semibold text-tone-amber">관리자</span>
+  return <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-semibold", ROLE_CHIP[role])}>{role}</span>
 }
 
 function GroupChip({ group }: { group: AccessGroup }) {
-  return <span className="rounded bg-muted px-1.5 py-px font-mono text-[11px] font-semibold">{group}</span>
+  return <span className="rounded-md bg-black/[0.045] px-1.5 py-0.5 font-mono text-[11px] font-semibold dark:bg-white/[0.07]">{group}</span>
 }
 
 function requestSummary(r: AccessRequest) {
@@ -409,11 +409,13 @@ export function AccessView() {
   return (
     <>
       <Section>
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border bg-card px-4 py-2.5 text-sm">
-          <LockKeyholeIcon className="size-4 text-tone-orange" />
-          <span className="font-bold">관리자 전용</span>
-          <span className="text-muted-foreground">
-            접근 요청 승인과 역할 부여를 처리합니다. 데모에서는 접근 제어 없이 표시되며 모든 변경은 이 화면에만 반영됩니다.
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl bg-card px-4 py-3 text-sm ring-1 ring-black/[0.055] apple-card-shadow dark:ring-white/[0.075]">
+          <span className="flex size-7 items-center justify-center rounded-lg bg-tone-orange/12 text-tone-orange">
+            <LockKeyholeIcon className="size-3.5 stroke-[2.2]" />
+          </span>
+          <span className="font-semibold text-foreground">관리자 거버넌스 콘솔</span>
+          <span className="text-[13px] text-muted-foreground">
+            접근 요청 결재와 그룹 역할 매트릭스를 관리합니다. 모든 변경은 데모 세션 메모리에만 즉시 반영됩니다.
           </span>
         </div>
       </Section>
@@ -482,12 +484,12 @@ export function AccessView() {
           <CardContent>
             {requestTab === "pending" ? (
               pending.length === 0 ? (
-                <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed py-10 text-sm text-muted-foreground">
-                  <CircleCheckIcon className="size-6 text-emerald-600 dark:text-emerald-300" />
+                <div className="flex flex-col items-center gap-2 rounded-2xl border border-dashed py-10 text-sm text-muted-foreground">
+                  <CircleCheckIcon className="size-6 text-tone-emerald" />
                   대기 중인 요청이 없습니다
                 </div>
               ) : (
-                <ul className="flex flex-col divide-y rounded-lg border">
+                <ul className="flex flex-col divide-y divide-black/[0.05] rounded-2xl border border-black/[0.055] dark:divide-white/[0.06] dark:border-white/[0.065]">
                   {pending.map((r) => {
                     const approvals = approvalsOf(r)
                     const need = required(r)
@@ -689,9 +691,9 @@ export function AccessView() {
               </div>
             </div>
 
-            <div className="overflow-x-auto rounded-lg border">
+            <div className="overflow-x-auto rounded-2xl border border-black/[0.055] dark:border-white/[0.065]">
               <Table>
-                <TableHeader className="bg-muted/60">
+                <TableHeader>
                   <TableRow>
                     <TableHead className="min-w-52">사용자</TableHead>
                     {ACCESS_GROUPS.map((g) => (
@@ -779,18 +781,18 @@ export function AccessView() {
             </div>
 
             {draftEntries.length > 0 && (
-              <div className="sticky bottom-3 z-10 flex flex-wrap items-center gap-3 rounded-lg border border-amber-500/40 bg-card px-4 py-3 shadow-md">
-                <TriangleAlertIcon className="size-4 text-amber-600 dark:text-amber-300" />
+              <div className="apple-glass sticky bottom-3 z-10 flex flex-wrap items-center gap-3 rounded-2xl border border-tone-amber/35 bg-white/85 px-4 py-3 shadow-xl dark:bg-[#1E2028]/88">
+                <TriangleAlertIcon className="size-4 text-tone-amber" />
                 <span className="text-sm">
-                  <b>{draftEntries.length}건</b>의 변경이 적용되지 않았습니다
-                  <span className="text-muted-foreground"> · 사용자 {changedUserIds.size}명</span>
+                  <b className="font-semibold">{draftEntries.length}건</b>의 변경이 아직 적용되지 않았습니다
+                  <span className="text-muted-foreground"> · 대상 {changedUserIds.size}명</span>
                 </span>
                 <div className="ml-auto flex gap-1.5">
-                  <Button variant="outline" size="sm" onClick={() => setDraft({})}>
+                  <Button variant="outline" size="sm" className="rounded-full" onClick={() => setDraft({})}>
                     <Undo2Icon />
                     되돌리기
                   </Button>
-                  <Button size="sm" onClick={() => setConfirm({ kind: "apply" })}>
+                  <Button size="sm" className="rounded-full" onClick={() => setConfirm({ kind: "apply" })}>
                     <CheckIcon />
                     변경 사항 적용
                   </Button>
@@ -903,9 +905,9 @@ export function AccessView() {
             <CardDescription>GitLab 기본 역할 기준 · 상위 역할은 하위 역할의 권한을 모두 포함합니다</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="overflow-x-auto rounded-lg border">
+            <div className="overflow-x-auto rounded-2xl border border-black/[0.055] dark:border-white/[0.065]">
               <Table>
-                <TableHeader className="bg-muted/60">
+                <TableHeader>
                   <TableRow>
                     <TableHead className="min-w-40">권한</TableHead>
                     {ROLE_ORDER.map((r) => (

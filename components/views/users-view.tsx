@@ -50,19 +50,19 @@ const STATUS_META: Record<UserStatus, { status: Status; label: string; icon: Luc
 }
 
 const ROLE_CLASS: Record<UserRole, string> = {
-  Owner: "bg-tone-rose/12 text-tone-rose",
-  Maintainer: "bg-tone-violet/12 text-tone-violet",
-  Developer: "bg-tone-indigo/12 text-tone-indigo",
-  Reporter: "bg-tone-sky/12 text-tone-sky",
-  Guest: "bg-muted text-muted-foreground",
+  Owner: "bg-tone-rose/10 text-tone-rose",
+  Maintainer: "bg-tone-violet/10 text-tone-violet",
+  Developer: "bg-tone-indigo/10 text-tone-indigo",
+  Reporter: "bg-tone-sky/10 text-tone-sky",
+  Guest: "bg-black/[0.05] text-muted-foreground dark:bg-white/[0.07]",
 }
 
 type Filter = "all" | "joiners" | "leavers" | "blocked" | "pending"
 
 const FILTERS: { value: Filter; label: string; icon?: LucideIcon }[] = [
   { value: "all", label: "전체" },
-  { value: "joiners", label: "입사자", icon: UserPlusIcon },
-  { value: "leavers", label: "퇴사자", icon: UserMinusIcon },
+  { value: "joiners", label: "신규 입사", icon: UserPlusIcon },
+  { value: "leavers", label: "퇴사 · 해제", icon: UserMinusIcon },
   { value: "blocked", label: "차단됨" },
   { value: "pending", label: "초대 대기" },
 ]
@@ -97,7 +97,7 @@ export function UsersView() {
   const rows = rowsFor(filter).filter(
     (u) => !q || `${u.name} ${u.username} ${u.email} ${u.department} ${u.title} ${u.role}`.toLowerCase().includes(q)
   )
-  const dateLabel = filter === "joiners" ? "입사일" : filter === "leavers" ? "퇴사일" : "마지막 활동"
+  const dateLabel = filter === "joiners" ? "입사일" : filter === "leavers" ? "퇴사일" : "최근 활동"
   const maxCommits = Math.max(...users.map((u) => u.weeklyCommits.slice(8).reduce((a, b) => a + b, 0)), 1)
   const no2fa = users.filter((u) => u.status === "active" && !u.twoFactor).length
 
@@ -108,12 +108,12 @@ export function UsersView() {
           label="활성 사용자"
           value={fmtInt(activeUsers.length)}
           unit="명"
-          hint={`전체 계정 ${users.length} · 관리자 ${users.filter((u) => u.isAdmin).length}`}
+          hint={`전체 계정 ${users.length} · 인스턴스 관리자 ${users.filter((u) => u.isAdmin).length}`}
           icon={UsersIcon}
           tone="indigo"
         />
         <KpiTile
-          label={`${USER_CHANGE_WINDOW_DAYS}일 입사`}
+          label={`${USER_CHANGE_WINDOW_DAYS}일 신규 입사`}
           value={fmtInt(joiners.length)}
           unit="명"
           hint={joiners[0] ? `최근: ${joiners[0].name} (${fmtDate(joiners[0].joinedAt)})` : undefined}
@@ -122,7 +122,7 @@ export function UsersView() {
           spark={headcountTrend.map((m) => m.joiners)}
         />
         <KpiTile
-          label={`${USER_CHANGE_WINDOW_DAYS}일 퇴사`}
+          label={`${USER_CHANGE_WINDOW_DAYS}일 퇴사 · 회수`}
           value={fmtInt(leavers.length)}
           unit="명"
           hint={leavers[0] ? `최근: ${leavers[0].name} (${fmtDate(leavers[0].leftAt ?? "")})` : undefined}
@@ -131,41 +131,43 @@ export function UsersView() {
           spark={headcountTrend.map((m) => m.leavers)}
         />
         <KpiTile
-          label="2FA 적용률"
+          label="2단계 인증(2FA) 준수율"
           value={fmtPct(twoFactorRate, 0)}
-          hint={`미적용 활성 사용자 ${no2fa}명 · 목표 100%`}
+          hint={`미적용 활성 계정 ${no2fa}명 · 목표 100%`}
           icon={twoFactorRate >= 90 ? ShieldCheckIcon : ShieldOffIcon}
           tone={twoFactorRate >= 90 ? "emerald" : "amber"}
         />
       </KpiGrid>
 
-      <div className="grid grid-cols-1 gap-4 px-4 lg:px-6 @3xl/main:grid-cols-2 @6xl/main:grid-cols-3">
-        <Card>
+      <div className="grid grid-cols-1 gap-4 px-4 lg:px-6 @3xl/main:grid-cols-2 @6xl/main:grid-cols-12">
+        <Card className="@6xl/main:col-span-4">
           <CardHeader>
-            <CardTitle>역할 분포</CardTitle>
-            <CardDescription>최고 권한 기준</CardDescription>
+            <CardTitle>권한 역할 분포</CardTitle>
+            <CardDescription>계정별 최고 부여 역할 기준</CardDescription>
           </CardHeader>
           <CardContent>
             <DonutChart
               data={roleCounts.map((r, i) => ({ key: r.role, label: r.role, value: r.count, color: `var(--chart-${i + 1})` }))}
               centerValue={String(users.length)}
-              centerLabel="계정"
+              centerLabel="전체 계정"
             />
           </CardContent>
         </Card>
-        <Card>
+
+        <Card className="@6xl/main:col-span-4">
           <CardHeader>
-            <CardTitle>부서별 인원</CardTitle>
+            <CardTitle>조직 부서별 인원</CardTitle>
             <CardDescription>비활성화 계정 제외</CardDescription>
           </CardHeader>
           <CardContent>
             <BarList color="var(--chart-1)" items={departmentCounts.map((d) => ({ key: d.department, label: d.department, value: d.count, display: `${d.count}명` }))} />
           </CardContent>
         </Card>
-        <Card className="@3xl/main:col-span-2 @6xl/main:col-span-1">
+
+        <Card className="@3xl/main:col-span-2 @6xl/main:col-span-4">
           <CardHeader>
-            <CardTitle>입사 / 퇴사 추이</CardTitle>
-            <CardDescription>최근 6개월 · 계정 생성과 비활성화</CardDescription>
+            <CardTitle>월별 계정 증감 추이</CardTitle>
+            <CardDescription>최근 6개월 입사 생성 및 퇴사 비활성화</CardDescription>
           </CardHeader>
           <CardContent>
             <TimeBarChart
@@ -173,7 +175,7 @@ export function UsersView() {
               xKey="month"
               series={[
                 { key: "joiners", label: "입사", color: "var(--chart-1)" },
-                { key: "leavers", label: "퇴사", color: "var(--chart-2)" },
+                { key: "leavers", label: "퇴사", color: "var(--chart-5)" },
               ]}
               xFormatter={fmtMonth}
               valueFormatter={(v) => `${v}명`}
@@ -186,9 +188,9 @@ export function UsersView() {
       <div className="px-4 lg:px-6">
         <Card>
           <CardHeader>
-            <CardTitle>사용자</CardTitle>
+            <CardTitle>조직원 디렉토리</CardTitle>
             <CardDescription>
-              {rows.length}명 표시 · 입사자와 퇴사자는 최근 {USER_CHANGE_WINDOW_DAYS}일 기준
+              {rows.length}명 표시 · 신규 입사 및 퇴사는 최근 {USER_CHANGE_WINDOW_DAYS}일 기준
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
@@ -207,20 +209,21 @@ export function UsersView() {
                 </TabsList>
               </Tabs>
               <div className="relative sm:w-72">
-                <SearchIcon className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
-                <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="이름, 아이디, 이메일, 부서 검색" className="pl-8" aria-label="사용자 검색" />
+                <SearchIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+                <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="이름, 아이디, 이메일, 부서 검색" className="pl-9" aria-label="사용자 검색" />
               </div>
             </div>
-            <div className="overflow-x-auto rounded-lg border">
+
+            <div className="overflow-x-auto rounded-2xl border border-black/[0.055] dark:border-white/[0.065]">
               <Table>
-                <TableHeader className="bg-muted/60">
+                <TableHeader>
                   <TableRow>
-                    <TableHead className="min-w-56">사용자</TableHead>
+                    <TableHead className="min-w-56">구성원</TableHead>
                     <TableHead className="hidden md:table-cell">부서 · 직함</TableHead>
                     <TableHead>역할</TableHead>
                     <TableHead>상태</TableHead>
                     <TableHead className="hidden text-center xl:table-cell">2FA</TableHead>
-                    <TableHead className="hidden lg:table-cell">30일 커밋</TableHead>
+                    <TableHead className="hidden lg:table-cell">30일 활동</TableHead>
                     <TableHead className="text-right">{dateLabel}</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -228,7 +231,7 @@ export function UsersView() {
                   {rows.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={7} className="h-24 text-center text-muted-foreground">
-                        해당하는 사용자가 없습니다.
+                        일치하는 구성원이 없습니다.
                       </TableCell>
                     </TableRow>
                   ) : (
@@ -242,29 +245,33 @@ export function UsersView() {
                             <UserCell name={u.name} hue={u.hue} secondary={`@${u.username}`} size="md" />
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            <div className="font-medium">{u.department}</div>
+                            <div className="font-medium text-foreground">{u.department}</div>
                             <div className="text-xs text-muted-foreground">{u.title}</div>
                           </TableCell>
                           <TableCell>
-                            <span className={`rounded px-1.5 py-px text-[11px] font-bold ${ROLE_CLASS[u.role]}`}>{u.role}</span>
-                            {u.isAdmin && <span className="ml-1 rounded bg-amber-500/14 px-1.5 py-px text-[11px] font-bold text-amber-800 dark:text-amber-300">관리자</span>}
+                            <span className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${ROLE_CLASS[u.role]}`}>{u.role}</span>
+                            {u.isAdmin && (
+                              <span className="ml-1 rounded-full bg-tone-amber/14 px-2 py-0.5 text-[11px] font-semibold text-tone-amber">
+                                관리자
+                              </span>
+                            )}
                           </TableCell>
                           <TableCell>
                             <StatusPill status={st.status} label={st.label} icon={st.icon} size="xs" />
                           </TableCell>
                           <TableCell className="hidden text-center xl:table-cell">
                             {u.twoFactor ? (
-                              <ShieldCheckIcon className="mx-auto size-4 text-emerald-600 dark:text-emerald-300" aria-label="2FA 사용" />
+                              <ShieldCheckIcon className="mx-auto size-4 text-tone-emerald" aria-label="2FA 사용" />
                             ) : (
-                              <ShieldOffIcon className="mx-auto size-4 text-muted-foreground/60" aria-label="2FA 미사용" />
+                              <ShieldOffIcon className="mx-auto size-4 text-muted-foreground/50" aria-label="2FA 미사용" />
                             )}
                           </TableCell>
                           <TableCell className="hidden lg:table-cell">
                             <div className="flex items-center gap-2">
-                              <div className="h-1.5 w-20 overflow-hidden rounded-full bg-muted">
+                              <div className="h-1.5 w-20 overflow-hidden rounded-full bg-black/[0.05] dark:bg-white/[0.07]">
                                 <div className="h-full rounded-full bg-tone-violet" style={{ width: `${(c30 / maxCommits) * 100}%` }} />
                               </div>
-                              <span className="w-8 text-right text-xs tabular-nums">{c30}</span>
+                              <span className="w-8 text-right text-xs font-medium tabular-nums">{c30}</span>
                             </div>
                           </TableCell>
                           <TableCell className="text-right text-xs text-muted-foreground whitespace-nowrap">

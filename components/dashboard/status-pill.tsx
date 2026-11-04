@@ -3,7 +3,7 @@ import type { LucideIcon } from "lucide-react"
 import { STATUS, type Status } from "@/lib/tones"
 import { cn } from "@/lib/utils"
 
-/** Status chip: color never carries the meaning alone, there is always an icon or dot plus a label. */
+/** Status chip: color never carries the meaning alone, always paired with icon or dot + label. */
 export function StatusPill({
   status,
   label,
@@ -21,8 +21,8 @@ export function StatusPill({
   return (
     <span
       className={cn(
-        "inline-flex shrink-0 items-center gap-1 rounded-full font-bold whitespace-nowrap",
-        size === "xs" ? "px-1.5 py-px text-[11px]" : "px-2 py-0.5 text-xs",
+        "inline-flex shrink-0 items-center gap-1 rounded-full font-semibold tracking-[-0.01em] whitespace-nowrap",
+        size === "xs" ? "px-2 py-0.5 text-[11px]" : "px-2.5 py-0.5 text-xs",
         s.soft,
         s.text,
         className

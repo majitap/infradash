@@ -62,9 +62,9 @@ npm run build   # ./out 에 정적 사이트 생성
 `main`에 푸시하면 `.github/workflows/deploy.yml`이 빌드 후 `./out`을 GitHub Pages에 배포합니다
 (Settings > Pages > Source: GitHub Actions).
 
-## 디자인 메모
+## 디자인 메모 (Apple HIG · Cupertino Bento Edition)
 
-- 글꼴: 네이버 나눔스퀘어 네오(공식 웹폰트 CDN), 기본 17px
-- 표면: 그라데이션 없이 단색 카드와 옅은 색 아이콘 칸만 사용
-- 차트 색상: 범주형 8색 팔레트는 색각 이상과 대비 검사를 통과한 순서로 고정, 상태 색(성공/경고/심각/치명)은 항상 아이콘·라벨과 함께 사용
-- 히트맵: 단일 색상(파랑) 순차 램프, 다크 모드는 별도 단계 사용
+- **타이포그래피**: Pretendard Variable + Apple SF Pro / Apple SD Gothic Neo + Geist Mono (`16px` 광학 스케일, 타이트한 디스플레이 자간 `-0.025em` 및 정렬 숫자 `tabular-nums`)
+- **표면 & 머티리얼**: Cupertino Alabaster 캔버스(`#F5F5F7`) 위 순백색 스쿼클 벤토 카드(`rounded-[22px]`)와 미세 헤어라인·다층 앰비언트 섀도우, 반투명 프로스티드 글래스(`backdrop-blur-2xl saturate-180`) 헤더 및 플로팅 바, 다크 모드는 Apple Pro Display XDR 스타일의 옵시디언-그래파이트 계층과 상단 스페큘러 하이라이트 적용
+- **데이터 시각화**: Catmull-Rom 기반 매끄러운 베지어(Bezier) 그라데이션 스파크라인, 듀얼 그라데이션 영역 차트, macOS 시스템 설정 스타일의 볼륨 점유율 바, 반응형 크리스탈 블루 기여도 히트맵
+- **공간 배치**: 이그제큐티브 펄스 히어로 + 다이나믹 아일랜드 스타일 S1 장애 캡슐, 비대칭 12컬럼 벤토 그리드, 프로젝트 카드/테이블 뷰 전환 지원
